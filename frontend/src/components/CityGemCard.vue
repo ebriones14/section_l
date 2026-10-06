@@ -13,7 +13,9 @@ defineProps<{ gem: CityGem }>()
     </div>
     <div class="gem-card__content">
       <div>
-        <p class="eyebrow">{{ gem.neighbourhoods.map((neighbourhood) => neighbourhood.name).join(' · ') }}</p>
+        <p class="eyebrow">
+          {{ gem.neighbourhoods.map((neighbourhood) => neighbourhood.name).join(' · ') }}
+        </p>
         <h3>{{ gem.name }}</h3>
       </div>
       <p class="gem-card__description">{{ gem.short }}</p>

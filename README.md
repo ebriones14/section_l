@@ -81,6 +81,7 @@ bin/rubocop
 bin/brakeman --no-pager
 
 cd ../frontend
+npm run format:check
 npm run build
 npm test
 npm audit

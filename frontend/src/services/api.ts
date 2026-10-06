@@ -43,7 +43,9 @@ export async function getProperties(): Promise<Property[]> {
 }
 
 export async function getProperty(slug: string): Promise<Property> {
-  const response = await request<{ property: Property }>(`/api/v1/properties/${encodeURIComponent(slug)}`)
+  const response = await request<{ property: Property }>(
+    `/api/v1/properties/${encodeURIComponent(slug)}`,
+  )
   return response.property
 }
 

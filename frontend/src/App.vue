@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import CityGemCard from './components/CityGemCard.vue'
-import {
-  getProperties,
-  getProperty,
-  type Property,
-} from './services/api'
+import { getProperties, getProperty, type Property } from './services/api'
 
 const properties = ref<Property[]>([])
 const currentProperty = ref<Property | null>(null)
@@ -43,7 +39,8 @@ onMounted(async () => {
     properties.value = await getProperties()
     if (properties.value[0]) await selectProperty(properties.value[0].slug)
   } catch (caught) {
-    error.value = caught instanceof Error ? caught.message : 'Could not connect to the City Notes API.'
+    error.value =
+      caught instanceof Error ? caught.message : 'Could not connect to the City Notes API.'
     loading.value = false
   }
 })
@@ -59,12 +56,17 @@ onMounted(async () => {
     </header>
 
     <main>
-      <section class="hero" :style="{ '--hero-image': `url(${currentProperty?.hero_image_url ?? ''})` }">
+      <section
+        class="hero"
+        :style="{ '--hero-image': `url(${currentProperty?.hero_image_url ?? ''})` }"
+      >
         <div class="hero__overlay"></div>
         <div class="hero__content">
           <p class="eyebrow eyebrow--light">A local guide from your hosts</p>
           <h1>Good places,<br /><em>close by.</em></h1>
-          <p class="hero__intro">{{ currentProperty?.description ?? 'Personally picked places for a day well spent.' }}</p>
+          <p class="hero__intro">
+            {{ currentProperty?.description ?? 'Personally picked places for a day well spent.' }}
+          </p>
           <label class="property-picker">
             <span>You’re staying at</span>
             <select
