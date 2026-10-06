@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
 
+/* ==========================================================================
+   Foundations: design tokens and global defaults
+   ========================================================================== */
+
 :root {
   font-family: 'DM Sans', system-ui, sans-serif;
   color: #192923;
@@ -36,9 +40,19 @@ button {
   color: inherit;
 }
 
+/* ==========================================================================
+   Shared application shell and header
+   ========================================================================== */
+
 .app-shell {
   min-height: 100vh;
   background: var(--cream);
+}
+.app-shell--configuration {
+  color: #16382c;
+  background:
+    radial-gradient(circle at 8% 4%, rgba(163, 211, 180, 0.45), transparent 28%),
+    linear-gradient(145deg, #edf7ef 0%, #f7fbf7 52%, #e3f1e7 100%);
 }
 
 .site-header {
@@ -71,15 +85,15 @@ button {
   font-size: 0.63rem;
 }
 
-.manager-link {
-  border: 0;
-  border-bottom: 1px solid currentColor;
-  background: transparent;
-  padding: 6px 0;
-  font-weight: 600;
-  font-size: 0.78rem;
-  cursor: pointer;
+.app-shell--configuration .site-header {
+  background: rgba(250, 253, 250, 0.8);
+  border-bottom-color: rgba(32, 89, 67, 0.12);
+  backdrop-filter: blur(18px);
 }
+
+/* ==========================================================================
+   Guest experience: property hero and context
+   ========================================================================== */
 
 .hero {
   min-height: 570px;
@@ -143,29 +157,28 @@ button {
   color: #d8e4d8;
 }
 
-.property-picker {
+.property-context {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   margin-top: 28px;
-  padding: 10px 12px 10px 16px;
+  padding: 11px 16px;
   gap: 10px;
   background: rgba(255, 253, 248, 0.95);
   color: var(--ink);
   border-radius: 3px;
 }
-.property-picker span {
+.property-context span {
   color: #617169;
   font-size: 0.72rem;
   white-space: nowrap;
 }
-.property-picker select {
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  font-weight: 700;
-  outline: none;
-  cursor: pointer;
+.property-context strong {
+  font-size: 0.88rem;
 }
+
+/* ==========================================================================
+   Guest experience: recommendations and category filters
+   ========================================================================== */
 
 .section-wrap {
   width: min(1180px, calc(100% - 48px));
@@ -215,6 +228,10 @@ button {
   border-color: var(--forest);
   color: white;
 }
+
+/* ==========================================================================
+   Guest experience: City Gem cards
+   ========================================================================== */
 
 .gem-grid,
 .loading-grid {
@@ -304,6 +321,10 @@ button {
   font-weight: 500;
 }
 
+/* ==========================================================================
+   Shared feedback states
+   ========================================================================== */
+
 .loading-card {
   height: 595px;
   background: linear-gradient(100deg, #e9e2d7 30%, #f7f3ec 50%, #e9e2d7 70%);
@@ -334,139 +355,228 @@ button {
   color: #2b653b;
 }
 
+/* ==========================================================================
+   Staff experience: iPad property configuration
+   ========================================================================== */
+
 .manager {
-  padding-top: 74px;
-  padding-bottom: 100px;
+  width: min(1040px, calc(100% - 48px));
+  padding-top: 44px;
+  padding-bottom: 72px;
 }
 .manager__heading {
   display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 32px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 38px;
+  align-items: center;
+  gap: 28px;
+  padding: 38px 42px;
+  color: white;
+  border-radius: 28px;
+  background: linear-gradient(130deg, #123d30 0%, #276a50 68%, #4f9570 100%);
+  box-shadow: 0 24px 60px rgba(28, 75, 57, 0.2);
+}
+.manager__heading-icon {
+  width: 72px;
+  height: 72px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+.manager__heading-icon svg {
+  width: 35px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
 }
 .manager h1 {
-  font-size: clamp(3rem, 6vw, 5.3rem);
-  margin: 0 0 10px;
-  line-height: 1;
+  font-size: clamp(2.8rem, 5vw, 4.6rem);
+  margin: 0 0 12px;
+  line-height: 0.98;
+}
+.manager__heading .eyebrow {
+  color: #cce7d4;
 }
 .manager__heading p:not(.eyebrow) {
-  color: #62716b;
-}
-.manager__property-picker {
-  display: grid;
-  gap: 8px;
-  min-width: 280px;
-}
-.manager__property-picker span {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-weight: 700;
-}
-.manager select {
-  padding: 13px;
-  background: var(--paper);
-  border: 1px solid var(--line);
+  max-width: 590px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.6;
 }
 .manager .notice {
-  margin: 25px 0 0;
+  margin: 24px 0 0;
+  border-radius: 16px;
+}
+.manager__selection {
+  margin-top: 26px;
+  padding: 30px;
+  border: 1px solid rgba(31, 89, 66, 0.11);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 45px rgba(40, 84, 66, 0.09);
+  backdrop-filter: blur(16px);
+}
+.manager__selection-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+}
+.manager__selection-heading h2 {
+  margin: 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 400;
+}
+.manager__selection-heading > span {
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: #e6f3e9;
+  color: #397056;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 .manager-list {
   display: grid;
-  gap: 12px;
-  margin-top: 32px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 24px;
 }
 .manager-item {
   width: 100%;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 112px 1fr 46px;
-  align-items: center;
-  gap: 22px;
+  min-width: 0;
   text-align: left;
-  border: 1px solid var(--line);
-  background: var(--paper);
   cursor: pointer;
   transition:
     border-color 0.2s,
-    transform 0.2s;
+    box-shadow 0.2s,
+    transform 0.2s,
+    background 0.2s;
+}
+.manager-item--property {
+  min-height: 202px;
+  padding: 22px;
+  display: grid;
+  grid-template-columns: 8px 1fr 30px;
+  align-items: start;
+  gap: 15px;
+  border: 1px solid #dce9df;
+  border-radius: 22px;
+  background: #f8fcf8;
 }
 .manager-item:hover {
-  transform: translateY(-1px);
-  border-color: #7b9288;
+  transform: translateY(-2px);
+  border-color: #88b99a;
+  box-shadow: 0 12px 28px rgba(39, 90, 68, 0.1);
 }
 .manager-item.selected {
-  border: 2px solid var(--forest);
+  border-color: #397b5d;
+  background: #eaf6ed;
+  box-shadow: 0 12px 30px rgba(39, 90, 68, 0.13);
 }
-.manager-item img {
-  width: 112px;
-  height: 112px;
-  object-fit: cover;
+.manager-item__marker {
+  width: 8px;
+  height: 100%;
+  min-height: 150px;
+  border-radius: 999px;
+  background: #dcebe0;
+}
+.selected .manager-item__marker {
+  background: linear-gradient(#4d9a70, #246449);
 }
 .manager-item__copy {
+  min-width: 0;
   display: grid;
-  gap: 5px;
-  padding: 12px 0;
+  gap: 7px;
 }
 .manager-item__copy strong {
   font-family: 'DM Serif Display', Georgia, serif;
-  font-size: 1.35rem;
+  font-size: 1.55rem;
   font-weight: 400;
+  line-height: 1.1;
 }
-.manager-item__copy > span:last-child {
-  color: #64736d;
-  font-size: 0.82rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.manager-item__copy > span:not(.eyebrow) {
+  color: #60746b;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+.manager-item__copy small {
+  align-self: end;
+  margin-top: 10px;
+  color: #397056;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 .manager-item__copy .eyebrow {
   margin: 0;
+  color: #59806d;
 }
 .checkmark {
-  width: 27px;
-  height: 27px;
+  width: 30px;
+  height: 30px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--line);
+  border: 1px solid #c9dccf;
   border-radius: 50%;
+  color: white;
   font-weight: 700;
 }
 .selected .checkmark {
-  background: var(--forest);
-  color: white;
+  background: #246449;
+  border-color: #246449;
 }
 .manager-actions {
   position: sticky;
-  bottom: 0;
-  margin-top: 26px;
-  padding: 18px 22px;
+  bottom: 18px;
+  margin-top: 22px;
+  padding: 18px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(245, 240, 231, 0.95);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(10px);
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(31, 89, 66, 0.13);
+  border-radius: 20px;
+  box-shadow: 0 14px 38px rgba(39, 77, 61, 0.13);
+  backdrop-filter: blur(14px);
 }
 .manager-actions p {
   margin: 0;
-  color: #65746e;
-  font-size: 0.85rem;
+  color: #60746b;
+  font-size: 0.82rem;
 }
 .primary-button {
-  padding: 13px 22px;
-  background: var(--forest);
+  padding: 14px 22px;
+  border-radius: 999px;
+  background: linear-gradient(110deg, #1d5b43, #4a936c);
   color: white;
   border: 0;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 8px 20px rgba(30, 91, 67, 0.2);
 }
 .primary-button:disabled {
   opacity: 0.55;
   cursor: wait;
 }
+.secondary-button {
+  padding: 12px 18px;
+  border: 1px solid #c9dccf;
+  border-radius: 999px;
+  background: white;
+  color: #315f4c;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Shared footer
+   ========================================================================== */
 
 footer {
   min-height: 140px;
@@ -486,6 +596,20 @@ footer p {
   font-size: 0.8rem;
 }
 
+/* ==========================================================================
+   Responsive layouts: iPad and tablet portrait
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .manager-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ==========================================================================
+   Responsive layouts: compact tablet
+   ========================================================================== */
+
 @media (max-width: 850px) {
   .hero {
     min-height: 520px;
@@ -500,14 +624,21 @@ footer p {
   .section-heading > p {
     margin-top: 20px;
   }
-  .manager__heading {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .manager__property-picker {
-    min-width: 0;
+}
+
+/* ==========================================================================
+   Responsive layouts: small tablet and large phone
+   ========================================================================== */
+
+@media (max-width: 700px) {
+  .manager-list {
+    grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   Responsive layouts: mobile
+   ========================================================================== */
 
 @media (max-width: 590px) {
   .site-header {
@@ -516,9 +647,6 @@ footer p {
   }
   .brand__sub {
     display: none;
-  }
-  .manager-link {
-    font-size: 0.7rem;
   }
   .section-wrap,
   .hero__content {
@@ -533,13 +661,9 @@ footer p {
   .hero h1 {
     font-size: 3.55rem;
   }
-  .property-picker {
-    width: 100%;
-    align-items: stretch;
+  .property-context {
+    align-items: flex-start;
     flex-direction: column;
-  }
-  .property-picker select {
-    width: 100%;
   }
   .recommendations {
     padding-top: 60px;
@@ -556,27 +680,53 @@ footer p {
     min-height: 300px;
   }
   .manager {
-    padding-top: 50px;
+    width: min(100% - 28px, 1040px);
+    padding-top: 24px;
   }
-  .manager-item {
-    grid-template-columns: 82px 1fr 35px;
+  .manager__heading {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 28px 24px;
+    border-radius: 22px;
+  }
+  .manager__heading-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 17px;
+  }
+  .manager__selection {
+    padding: 22px 16px;
+    border-radius: 22px;
+  }
+  .manager__selection-heading {
+    align-items: flex-start;
+    flex-direction: column;
     gap: 12px;
   }
-  .manager-item img {
-    width: 82px;
-    height: 100%;
-    min-height: 108px;
+  .manager-item--property {
+    min-height: 0;
+    padding: 18px;
   }
-  .manager-item__copy > span:last-child {
-    display: none;
+  .manager-item__marker {
+    min-height: 132px;
   }
   .manager-actions {
+    bottom: 10px;
+    align-items: stretch;
+    flex-direction: column;
     padding: 14px;
+  }
+  .manager-actions .primary-button {
+    width: 100%;
   }
   footer {
     display: block;
   }
 }
+
+/* ==========================================================================
+   Accessibility preferences
+   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   *,

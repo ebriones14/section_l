@@ -4,7 +4,7 @@ A small, tablet-friendly MVP that helps Section L guests discover genuinely loca
 
 ## What is included
 
-- Guest experience with property switching, category filters, image-led recommendation cards, maps, and source websites
+- Guest experience with persistent iPad property configuration, category filters, image-led recommendation cards, maps, and source websites
 - City Gems selected through reusable neighbourhood tagging
 - Rails 8.1 JSON API with PostgreSQL, validation, foreign keys, CORS, and idempotent sample seeds
 - Vue 3 + TypeScript frontend built with Vite
@@ -21,6 +21,10 @@ The MVP models three concepts:
 - `CityGemNeighbourhood`: the join model supporting the many-to-many City Gem/neighbourhood relationship
 
 The guest interface is intentionally editorial rather than a generic directory. Administrative CRUD and authentication are intentionally outside this prototype.
+Operations configures each iPad once in the frontend; the selected property slug
+is stored in that device's local storage. Staff can deliberately revisit
+`/configure` to assign the device to another property; the guest view does not
+expose configuration controls.
 
 ## Requirements
 
@@ -89,8 +93,8 @@ npm audit
 
 ## Next steps after the MVP
 
-1. Add staff-authenticated CRUD for City Gems and properties.
-2. Add image uploads and editorial ordering.
-3. Move production data to PostgreSQL and add deployment configuration.
+1. Protect `/configure` with staff authentication and store device assignments centrally.
+2. Add staff-authenticated CRUD for City Gems and properties.
+3. Add image uploads and editorial ordering.
 4. Add browser-level tests for the guest journey and future operations tools.
-5. Add multilingual copy and basic recommendation analytics.
+5. Add deployment configuration, multilingual copy, and basic recommendation analytics.
