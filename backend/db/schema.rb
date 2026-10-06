@@ -11,9 +11,12 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.1].define(version: 2026_10_06_090100) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
   create_table "city_gem_neighbourhoods", force: :cascade do |t|
-    t.integer "city_gem_id", null: false
-    t.integer "neighbourhood_id", null: false
+    t.bigint "city_gem_id", null: false
+    t.bigint "neighbourhood_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["city_gem_id", "neighbourhood_id"], name: "idx_on_city_gem_id_neighbourhood_id_c0b3755852", unique: true
@@ -58,8 +61,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_06_090100) do
   end
 
   create_table "property_neighbourhoods", force: :cascade do |t|
-    t.integer "property_id", null: false
-    t.integer "neighbourhood_id", null: false
+    t.bigint "property_id", null: false
+    t.bigint "neighbourhood_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["neighbourhood_id"], name: "index_property_neighbourhoods_on_neighbourhood_id"

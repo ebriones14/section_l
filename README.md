@@ -6,7 +6,7 @@ A small, tablet-friendly MVP that helps Section L guests discover genuinely loca
 
 - Guest experience with property switching, category filters, image-led recommendation cards, maps, and source websites
 - City Gems selected through reusable neighbourhood tagging
-- Rails 8.1 JSON API with SQLite, validation, foreign keys, CORS, and idempotent sample seeds
+- Rails 8.1 JSON API with PostgreSQL, validation, foreign keys, CORS, and idempotent sample seeds
 - Vue 3 + TypeScript frontend built with Vite
 - Rails model/integration tests, Vitest API-client tests, RuboCop, Brakeman, and npm audit/build checks
 
@@ -26,9 +26,15 @@ The guest interface is intentionally editorial rather than a generic directory. 
 
 - Ruby 3.4.6
 - Node 22.13.1
+- PostgreSQL 14 or newer
 - Bundler and npm
 
 The versions are captured in `.tool-versions` for `mise` users.
+
+The default local databases are `section_l_development` and `section_l_test`.
+Set `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, and `POSTGRES_PASSWORD`
+when your PostgreSQL server does not use the local socket defaults. A production
+`DATABASE_URL` overrides these settings through Rails' standard configuration.
 
 ## Setup
 
