@@ -1,11 +1,10 @@
 require "test_helper"
 
 class CityGemTest < ActiveSupport::TestCase
-  test "belongs to a property and requires guest-facing content" do
+  test "requires guest-facing content" do
     city_gem = CityGem.new(name: "Coffee Stand", category: "Coffee")
 
     assert_not city_gem.valid?
-    assert_includes city_gem.errors[:property], "must exist"
     assert_includes city_gem.errors[:short], "can't be blank"
     assert_includes city_gem.errors[:long], "can't be blank"
     assert_includes city_gem.errors[:maps], "can't be blank"

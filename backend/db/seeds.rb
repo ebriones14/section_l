@@ -68,7 +68,6 @@ end.transform_keys { |data| data.fetch(:slug) }
 
 city_gem_data = [
   {
-    property_slug: "ginza-east",
     neighbourhood_names: [ "Ginza", "Hatchobori", "Tsukiji" ],
     name: "Turret Coffee",
     category: "Food & Drink",
@@ -77,7 +76,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Turret+Coffee+Tokyo"
   },
   {
-    property_slug: "ginza-east",
     neighbourhood_names: [ "Ginza", "Hatchobori", "Tsukiji" ],
     name: "Maru",
     category: "Food & Drink",
@@ -86,7 +84,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Maru+Ginza+Tokyo"
   },
   {
-    property_slug: "ginza-east",
     neighbourhood_names: [ "Ginza", "Hatchobori", "Tsukiji" ],
     name: "Nihombashi Sando",
     category: "Food & Drink",
@@ -95,7 +92,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Nihombashi+Sando+Tokyo"
   },
   {
-    property_slug: "residence-ginza",
     neighbourhood_names: [ "Ginza" ],
     name: "Postaco",
     category: "Shopping",
@@ -104,7 +100,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Postaco+Tokyo"
   },
   {
-    property_slug: "residence-ginza",
     neighbourhood_names: [ "Ginza" ],
     name: "FEELSEN",
     category: "Shopping",
@@ -113,7 +108,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=FEELSEN+Ginza+Tokyo"
   },
   {
-    property_slug: "residence-ginza",
     neighbourhood_names: [ "Ginza" ],
     name: "Ginza Six Rooftop",
     category: "Culture",
@@ -122,7 +116,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Ginza+Six+Rooftop+Tokyo"
   },
   {
-    property_slug: "hatchobori",
     neighbourhood_names: [ "Hatchobori" ],
     name: "Cafe Ajito N",
     category: "Food & Drink",
@@ -131,7 +124,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Cafe+Ajito+N+Tokyo"
   },
   {
-    property_slug: "hatchobori",
     neighbourhood_names: [ "Hatchobori" ],
     name: "Teppozu Inari Shrine",
     category: "Culture",
@@ -140,7 +132,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Teppozu+Inari+Shrine+Tokyo"
   },
   {
-    property_slug: "hatchobori",
     neighbourhood_names: [ "Hatchobori" ],
     name: "Senmaiya",
     category: "Food & Drink",
@@ -149,7 +140,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Senmaiya+Tokyo"
   },
   {
-    property_slug: "ginza-east",
     neighbourhood_names: [ "Tsukiji" ],
     name: "Shukuba Ganso",
     category: "Food & Drink",
@@ -158,7 +148,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Shukuba+Ganso+Tokyo"
   },
   {
-    property_slug: "ginza-east",
     neighbourhood_names: [ "Tsukiji" ],
     name: "Ichifuji",
     category: "Shopping",
@@ -167,7 +156,6 @@ city_gem_data = [
     maps: "https://www.google.com/maps/search/?api=1&query=Ichifuji+Tsukiji+Tokyo"
   },
   {
-    property_slug: "ginza-east",
     neighbourhood_names: [ "Tsukiji" ],
     name: "Kunisuke Coffee",
     category: "Food & Drink",
@@ -178,9 +166,8 @@ city_gem_data = [
 ]
 
 city_gem_data.each do |data|
-  property = properties.fetch(data.fetch(:property_slug))
-  attributes = data.except(:property_slug, :neighbourhood_names)
-  city_gem = CityGem.find_or_initialize_by(property: property, name: data.fetch(:name))
+  attributes = data.except(:neighbourhood_names)
+  city_gem = CityGem.find_or_initialize_by(name: data.fetch(:name))
   city_gem.update!(attributes)
   city_gem.neighbourhoods = data.fetch(:neighbourhood_names).map { |name| neighbourhoods.fetch(name) }
 end

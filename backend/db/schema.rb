@@ -22,16 +22,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_06_090100) do
   end
 
   create_table "city_gems", force: :cascade do |t|
-    t.integer "property_id", null: false
     t.string "name", null: false
     t.string "category", null: false
     t.string "short", null: false
-    t.string "long", null: false
+    t.text "long", null: false
     t.string "maps", null: false
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["property_id"], name: "index_city_gems_on_property_id"
   end
 
   create_table "neighbourhoods", force: :cascade do |t|
@@ -39,12 +37,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_06_090100) do
     t.string "hashtag"
     t.text "hashtag_description"
     t.text "description"
-    t.string "city"
+    t.string "city", null: false
     t.string "map_pin"
     t.string "tags"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_neighbourhoods_on_name", unique: true
+    t.index ["city", "name"], name: "index_neighbourhoods_on_city_and_name", unique: true
   end
 
   create_table "properties", force: :cascade do |t|
@@ -71,7 +69,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_06_090100) do
 
   add_foreign_key "city_gem_neighbourhoods", "city_gems"
   add_foreign_key "city_gem_neighbourhoods", "neighbourhoods"
-  add_foreign_key "city_gems", "properties"
   add_foreign_key "property_neighbourhoods", "neighbourhoods"
   add_foreign_key "property_neighbourhoods", "properties"
 end

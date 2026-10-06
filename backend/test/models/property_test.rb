@@ -28,4 +28,19 @@ class PropertyTest < ActiveSupport::TestCase
 
     assert_equal [ "Ginza", "Hatchobori" ], property.neighbourhoods.order(:name).pluck(:name)
   end
+
+  test "finds distinct city gems through its neighbourhoods" do
+    property = Property.create!(
+      name: "Section L Distinct", address: "1 Test Street",
+      description: "A test property", city: "Tokyo", slug: "distinct-test"
+    )
+    first_neighbourhood = Neighbourhood.create!(name: "Distinct One", city: "Tokyo")
+    second_neighbourhood = Neighbourhood.create!(name: "Distinct Two", city: "Tokyo")
+    property.neighbourhoods = [ first_neighbourhood, second_neighbourhood ]
+
+    city_gem = city_gems(:one)
+    city_gem.neighbourhoods = [ first_neighbourhood, second_neighbourhood ]
+
+    assert_equal [ city_gem.id ], property.city_gems.pluck(:id)
+  end
 end

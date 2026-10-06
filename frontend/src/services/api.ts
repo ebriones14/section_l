@@ -1,6 +1,5 @@
 export interface CityGem {
   id: number
-  property_id: number
   name: string
   category: string
   short: string

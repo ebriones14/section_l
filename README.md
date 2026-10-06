@@ -5,7 +5,7 @@ A small, tablet-friendly MVP that helps Section L guests discover genuinely loca
 ## What is included
 
 - Guest experience with property switching, category filters, image-led recommendation cards, maps, and source websites
-- Property-owned City Gems with reusable neighbourhood tagging
+- City Gems selected through reusable neighbourhood tagging
 - Rails 8.1 JSON API with SQLite, validation, foreign keys, CORS, and idempotent sample seeds
 - Vue 3 + TypeScript frontend built with Vite
 - Rails model/integration tests, Vitest API-client tests, RuboCop, Brakeman, and npm audit/build checks
@@ -17,7 +17,7 @@ The MVP models three concepts:
 - `Property`: a Section L location with a name, address, and description
 - `Neighbourhood`: an area shared by one or more properties
 - `PropertyNeighbourhood`: the join model supporting the many-to-many property/neighbourhood relationship
-- `CityGem`: a curated place owned by one property
+- `CityGem`: a curated place that can appear for any property sharing one of its neighbourhoods
 - `CityGemNeighbourhood`: the join model supporting the many-to-many City Gem/neighbourhood relationship
 
 The guest interface is intentionally editorial rather than a generic directory. Administrative CRUD and authentication are intentionally outside this prototype.

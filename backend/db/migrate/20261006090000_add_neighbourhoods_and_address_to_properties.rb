@@ -8,13 +8,13 @@ class AddNeighbourhoodsAndAddressToProperties < ActiveRecord::Migration[8.1]
       t.string :hashtag
       t.text :hashtag_description
       t.text :description
-      t.string :city
+      t.string :city, null: false
       t.string :map_pin
       t.string :tags
 
       t.timestamps
     end
-    add_index :neighbourhoods, :name, unique: true
+    add_index :neighbourhoods, [ :city, :name ], unique: true
 
     create_table :property_neighbourhoods do |t|
       t.references :property, null: false, foreign_key: true

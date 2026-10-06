@@ -4,5 +4,6 @@ class Neighbourhood < ApplicationRecord
   has_many :city_gem_neighbourhoods, dependent: :destroy
   has_many :city_gems, through: :city_gem_neighbourhoods
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, :city, presence: true
+  validates :name, uniqueness: { scope: :city }
 end

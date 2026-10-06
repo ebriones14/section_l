@@ -11,16 +11,29 @@ class CityNotesApiTest < ActionDispatch::IntegrationTest
       name: "Section L Tsukiji", city: "Tokyo", slug: "tsukiji",
       address: "4 Chome Tsukiji, Chuo City, Tokyo", description: "Near the market"
     )
+    market = Neighbourhood.create!(name: "Tsukiji Market", city: "Tokyo")
+    waterfront = Neighbourhood.create!(name: "Tsukiji Waterfront", city: "Tokyo")
+    elsewhere = Neighbourhood.create!(name: "Shinjuku", city: "Tokyo")
+    @property.neighbourhoods = [ market, waterfront ]
+
     @coffee = CityGem.create!(
-      property: @property, name: "Turret Coffee", category: "Coffee",
+      name: "Turret Coffee", category: "Coffee",
       short: "A tiny espresso bar.", long: "A tiny espresso bar near the market.",
       maps: "https://maps.example.com/turret"
     )
+    @coffee.neighbourhoods = [ market, waterfront ]
     @garden = CityGem.create!(
-      property: @property, name: "Hamarikyu Gardens", category: "Explore",
+      name: "Hamarikyu Gardens", category: "Explore",
       short: "A peaceful garden.", long: "A peaceful garden near the property.",
       maps: "https://maps.example.com/garden"
     )
+    @garden.neighbourhoods = [ waterfront ]
+    @distant_gem = CityGem.create!(
+      name: "Distant Cafe", category: "Coffee",
+      short: "Too far away.", long: "A valid gem outside the property's neighbourhoods.",
+      maps: "https://maps.example.com/distant"
+    )
+    @distant_gem.neighbourhoods = [ elsewhere ]
   end
 
   test "lists properties" do
@@ -31,7 +44,7 @@ class CityNotesApiTest < ActionDispatch::IntegrationTest
     assert_equal "tsukiji", payload.dig("properties", 0, "slug")
   end
 
-  test "shows the city gems that belong to a property" do
+  test "shows distinct city gems matching the property's neighbourhoods" do
     get "/api/v1/properties/tsukiji"
 
     assert_response :success
