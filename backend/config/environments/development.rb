@@ -14,6 +14,9 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
+  # Allow the internal Compose hostname when requests are proxied through Vite.
+  config.hosts << ENV["RAILS_DEVELOPMENT_HOST"] if ENV["RAILS_DEVELOPMENT_HOST"].present?
+
   # Enable server timing.
   config.server_timing = true
 

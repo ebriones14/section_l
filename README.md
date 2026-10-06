@@ -28,6 +28,10 @@ expose configuration controls.
 
 ## Requirements
 
+For the quickest setup, install Docker with Compose. Docker Desktop includes both.
+
+For the manual setup, install:
+
 - Ruby 3.4.6
 - Node 22.13.1
 - PostgreSQL 14 or newer
@@ -40,7 +44,33 @@ Set `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, and `POSTGRES_PASSWORD`
 when your PostgreSQL server does not use the local socket defaults. A production
 `DATABASE_URL` overrides these settings through Rails' standard configuration.
 
-## Setup
+## Run with Docker
+
+From the repository root:
+
+```bash
+docker compose up --build
+```
+
+The legacy `docker-compose up --build` command uses the same configuration.
+Compose waits for PostgreSQL, prepares and seeds the database, starts Rails, and
+then starts Vite. Open <http://localhost:5173> when the services are ready.
+
+Stop the stack with `Ctrl+C`, followed by:
+
+```bash
+docker compose down
+```
+
+The PostgreSQL data is preserved in a named volume. To reset all Docker data and
+reseed from scratch:
+
+```bash
+docker compose down --volumes
+docker compose up --build
+```
+
+## Manual setup
 
 ```bash
 npm run setup
@@ -66,7 +96,9 @@ cd backend && bin/rails server -p 3000
 cd frontend && npm run dev
 ```
 
-Open <http://localhost:5173>. Vite proxies `/api` to Rails during development. For separate deployed origins, set `VITE_API_URL` on the frontend and `FRONTEND_ORIGIN` on the backend.
+Open <http://localhost:5173>. Vite proxies `/api` to Rails during development.
+Set `VITE_API_PROXY_TARGET` to change the proxy destination and
+`FRONTEND_ORIGIN` to change the origin accepted by Rails.
 
 ## API
 
