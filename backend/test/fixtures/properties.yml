@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Section L Tsukiji
+  city: Tokyo
+  slug: tsukiji-fixture
+  address: 4 Chome Tsukiji, Chuo City, Tokyo
+  description: Near the market
+  hero_image_url: https://example.com/tsukiji.jpg
+
+two:
+  name: Section L Kuramae
+  city: Tokyo
+  slug: kuramae-fixture
+  address: 2 Chome Kuramae, Taito City, Tokyo
+  description: Near the river
+  hero_image_url: https://example.com/kuramae.jpg

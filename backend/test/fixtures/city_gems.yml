@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  property: one
+  name: MyString
+  category: MyString
+  short: A short recommendation
+  long: A longer recommendation for guests
+  maps: https://maps.example.com/one
+  image_url: MyString
+
+two:
+  property: two
+  name: MyString
+  category: MyString
+  short: Another short recommendation
+  long: Another longer recommendation for guests
+  maps: https://maps.example.com/two
+  image_url: MyString

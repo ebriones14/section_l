@@ -1,0 +1,7 @@
+tsukiji_hatchobori:
+  property: one
+  neighbourhood: hatchobori
+
+kuramae_ginza:
+  property: two
+  neighbourhood: ginza

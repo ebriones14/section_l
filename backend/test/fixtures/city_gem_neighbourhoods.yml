@@ -1,0 +1,7 @@
+first_gem_hatchobori:
+  city_gem: one
+  neighbourhood: hatchobori
+
+second_gem_ginza:
+  city_gem: two
+  neighbourhood: ginza
