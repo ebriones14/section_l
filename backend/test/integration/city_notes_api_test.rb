@@ -52,6 +52,24 @@ class CityNotesApiTest < ActionDispatch::IntegrationTest
       response.parsed_body.dig("property", "city_gems").pluck("name")
   end
 
+  test "uses a constant query count when serializing more city gems" do
+    neighbourhood = @property.neighbourhoods.first
+    5.times do |index|
+      gem = CityGem.create!(
+        name: "Extra Gem #{index}", category: "Explore",
+        short: "Another nearby place.", long: "Another nearby place worth visiting.",
+        maps: "https://maps.example.com/extra-#{index}"
+      )
+      gem.neighbourhoods = [ neighbourhood ]
+    end
+
+    assert_queries_count(6) do
+      get "/api/v1/properties/tsukiji"
+    end
+
+    assert_response :success
+  end
+
   test "returns a JSON 404 for an unknown property" do
     get "/api/v1/properties/missing"
 
