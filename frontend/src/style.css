@@ -95,13 +95,30 @@ button {
 }
 
 .configure-link {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(32, 89, 67, 0.14);
+  border-radius: 50%;
+  background: #f4f8f5;
   color: #617169;
-  font-size: 0.78rem;
-  font-weight: 600;
   text-decoration: none;
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
 }
 .configure-link:hover {
+  border-color: rgba(32, 89, 67, 0.28);
+  background: #e9f3ec;
   color: var(--forest);
+  transform: rotate(12deg);
+}
+.configure-link:focus-visible {
+  outline: 3px solid rgba(79, 149, 112, 0.35);
+  outline-offset: 3px;
 }
 
 .app-shell--configuration .site-header {

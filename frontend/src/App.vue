@@ -5,6 +5,7 @@ import {
   Landmark,
   LockKeyhole,
   MapPin,
+  Settings,
   ShoppingBag,
   Sparkles,
   Trees,
@@ -185,7 +186,15 @@ onMounted(async () => {
         <span class="brand__main">SECTION L</span>
         <span class="brand__sub">CITY NOTES</span>
       </div>
-      <a v-if="screen === 'guest'" class="configure-link" href="/configure">Staff setup</a>
+      <a
+        v-if="screen === 'guest'"
+        class="configure-link"
+        href="/configure"
+        aria-label="Staff setup"
+        title="Staff setup"
+      >
+        <Settings :size="22" :stroke-width="1.8" aria-hidden="true" />
+      </a>
     </header>
 
     <main v-if="screen === 'staff-login'" class="staff-login section-wrap">
