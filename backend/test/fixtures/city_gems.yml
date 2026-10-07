@@ -7,6 +7,9 @@ one:
   long: A longer recommendation for guests
   maps: https://maps.example.com/one
   image_url: MyString
+  tags:
+    - Coffee
+    - Breakfast
 
 two:
   name: MyString
@@ -15,3 +18,4 @@ two:
   long: Another longer recommendation for guests
   maps: https://maps.example.com/two
   image_url: MyString
+  tags: []

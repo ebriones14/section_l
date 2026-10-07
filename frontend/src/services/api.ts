@@ -6,6 +6,7 @@ export interface CityGem {
   long: string
   maps: string
   image_url: string | null
+  tags: string[]
   neighbourhoods: Array<{ id: number; name: string }>
 }
 

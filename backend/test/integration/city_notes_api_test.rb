@@ -19,7 +19,7 @@ class CityNotesApiTest < ActionDispatch::IntegrationTest
     @coffee = CityGem.create!(
       name: "Turret Coffee", category: "Coffee",
       short: "A tiny espresso bar.", long: "A tiny espresso bar near the market.",
-      maps: "https://maps.example.com/turret"
+      maps: "https://maps.example.com/turret", tags: [ "Coffee", "Breakfast" ]
     )
     @coffee.neighbourhoods = [ market, waterfront ]
     @garden = CityGem.create!(
@@ -50,6 +50,8 @@ class CityNotesApiTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal [ "Hamarikyu Gardens", "Turret Coffee" ],
       response.parsed_body.dig("property", "city_gems").pluck("name")
+    assert_equal [ "Coffee", "Breakfast" ],
+      response.parsed_body.dig("property", "city_gems", 1, "tags")
   end
 
   test "uses a constant query count when serializing more city gems" do

@@ -10,6 +10,7 @@ module Api
           long: record.long,
           maps: record.maps,
           image_url: record.image_url,
+          tags: record.tags,
           neighbourhoods: NeighbourhoodSerializer.many(record.neighbourhoods)
         }
       end

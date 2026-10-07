@@ -4,6 +4,7 @@ import {
   Gem,
   Landmark,
   LockKeyhole,
+  MapPin,
   ShoppingBag,
   Sparkles,
   Trees,
@@ -16,7 +17,6 @@ import {
   getProperties,
   getProperty,
   hasValidStaffSession,
-  type CityGem,
   type Property,
 } from './services/api'
 import {
@@ -32,6 +32,8 @@ import {
 
 type Screen = 'loading' | 'guest' | 'staff-login' | 'configuration'
 
+const DEFAULT_HERO_IMAGE = '/images/default-property-hero.webp'
+
 const properties = ref<Property[]>([])
 const currentProperty = ref<Property | null>(null)
 const pendingPropertySlug = ref('')
@@ -39,7 +41,6 @@ const selectedCategory = ref('All')
 const screen = ref<Screen>('loading')
 const savingConfiguration = ref(false)
 const error = ref('')
-const selectedGem = ref<CityGem | null>(null)
 const staffPin = ref('')
 const unlockingConfiguration = ref(false)
 
@@ -72,14 +73,6 @@ const visibleGems = computed(() => {
 async function loadProperty(slug: string) {
   currentProperty.value = await getProperty(slug)
   selectedCategory.value = 'All'
-}
-
-function openGemDetails(gem: CityGem) {
-  selectedGem.value = gem
-}
-
-function closeGemDetails() {
-  selectedGem.value = null
 }
 
 function lockConfiguration() {
@@ -314,33 +307,24 @@ onMounted(async () => {
     <main v-else>
       <section
         class="hero"
-        :style="{ '--hero-image': `url(${currentProperty?.hero_image_url ?? ''})` }"
+        :style="{
+          '--hero-image': `url(${currentProperty?.hero_image_url || DEFAULT_HERO_IMAGE})`,
+        }"
       >
-        <div class="hero__overlay"></div>
         <div class="hero__content">
           <p class="eyebrow eyebrow--light">Explore around</p>
           <h1>{{ currentProperty?.name }}</h1>
           <p class="hero__intro">{{ currentProperty?.description }}</p>
-          <div v-if="currentProperty" class="property-context">
-            <span class="property-context__pin" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
-            </span>
-            <span class="property-context__copy">
-              <strong>{{ currentProperty.city }}</strong>
-              <span v-if="currentProperty.neighbourhoods.length" class="property-context__areas">
-                ·
-                {{
-                  currentProperty.neighbourhoods
-                    .map((neighbourhood) => neighbourhood.name)
-                    .join(' · ')
-                }}
+          <div v-if="currentProperty" class="hero__facts">
+            <div class="hero-fact">
+              <span class="hero-fact__icon" aria-hidden="true">
+                <MapPin :size="24" :stroke-width="1.7" />
               </span>
-              <br />
-              <small>{{ currentProperty.address }}</small>
-            </span>
+              <span class="hero-fact__copy">
+                <strong>{{ currentProperty.city }}</strong>
+                <small>{{ currentProperty.address }}</small>
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -381,12 +365,7 @@ onMounted(async () => {
           <div v-for="index in 3" :key="index" class="loading-card"></div>
         </div>
         <div v-else-if="visibleGems.length" class="gem-grid">
-          <CityGemCard
-            v-for="gem in visibleGems"
-            :key="gem.id"
-            :gem="gem"
-            @select="openGemDetails"
-          />
+          <CityGemCard v-for="gem in visibleGems" :key="gem.id" :gem="gem" />
         </div>
         <div v-else class="empty-state">No picks in this category yet. Check back soon.</div>
       </section>
@@ -396,44 +375,5 @@ onMounted(async () => {
       <span>SECTION L</span>
       <p>Made for curious guests in Tokyo.</p>
     </footer>
-
-    <div
-      v-if="selectedGem"
-      class="details-backdrop"
-      role="presentation"
-      @click.self="closeGemDetails"
-    >
-      <article
-        class="details-panel"
-        role="dialog"
-        aria-modal="true"
-        :aria-labelledby="`gem-${selectedGem.id}-title`"
-      >
-        <button
-          type="button"
-          class="details-panel__close"
-          aria-label="Close details"
-          @click="closeGemDetails"
-        >
-          ×
-        </button>
-        <div class="details-panel__image">
-          <img v-if="selectedGem.image_url" :src="selectedGem.image_url" :alt="selectedGem.name" />
-          <div v-else class="gem-card__placeholder" aria-hidden="true">
-            <span>{{ selectedGem.name.slice(0, 1) }}</span>
-            <small>Section L pick</small>
-          </div>
-        </div>
-        <div class="details-panel__content">
-          <p class="eyebrow">
-            {{ selectedGem.neighbourhoods.map((neighbourhood) => neighbourhood.name).join(' · ') }}
-          </p>
-          <h2 :id="`gem-${selectedGem.id}-title`">{{ selectedGem.name }}</h2>
-          <p class="details-panel__lead">{{ selectedGem.short }}</p>
-          <p>{{ selectedGem.long }}</p>
-          <a :href="selectedGem.maps" target="_blank" rel="noreferrer">Open in Google Maps ↗</a>
-        </div>
-      </article>
-    </div>
   </div>
 </template>
