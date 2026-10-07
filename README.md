@@ -112,6 +112,7 @@ bin/rails db:seed
 
 cd ../frontend
 npm install
+npx playwright install chromium
 ```
 
 Set the staff PIN in every shell that starts Rails:
@@ -169,3 +170,31 @@ npm test -- --run
 npm run build
 npm audit
 ```
+
+Browser journey (keep the Docker application running in another terminal):
+
+```bash
+npm --prefix frontend exec -- playwright install chromium # required once per machine
+npm run test:e2e
+```
+
+Open Playwright's interactive test runner from the repository root:
+
+```bash
+npm run test:e2e:ui
+```
+
+Or launch Playwright directly in headed UI mode from the frontend directory:
+
+```bash
+cd frontend
+npx playwright test --headed --ui
+```
+
+Run these scripts instead of invoking `npx playwright test` from the repository root. The scripts
+use the frontend's Playwright installation and configuration, keeping Vitest files out of the
+browser-test suite.
+
+The Playwright suite uses an iPad Pro-sized viewport and verifies the staff PIN, property
+selection, guest recommendations, and local-storage persistence. Set `PLAYWRIGHT_BASE_URL` to
+run the same suite against another environment.

@@ -4,6 +4,8 @@
   "scripts": {
     "setup": "cd backend && bundle install && bin/rails db:prepare db:seed && cd ../frontend && npm install",
     "test": "cd backend && bin/rails test && cd ../frontend && npm test",
+    "test:e2e": "cd frontend && npm run test:e2e",
+    "test:e2e:ui": "cd frontend && npm run test:e2e:ui",
     "build": "cd frontend && npm run build"
   }
 }
