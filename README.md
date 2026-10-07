@@ -20,15 +20,22 @@ The MVP models three concepts:
 - `CityGem`: a curated place that can appear for any property sharing one of its neighbourhoods
 - `CityGemNeighbourhood`: the join model supporting the many-to-many City Gem/neighbourhood relationship
 
-The guest interface is intentionally editorial rather than a generic directory. Administrative CRUD and authentication are intentionally outside this prototype.
+The guest interface is intentionally editorial rather than a generic directory. Administrative CRUD is intentionally outside this prototype.
 Operations configures each iPad once in the frontend; the selected property slug
-is stored in that device's local storage. Staff can deliberately revisit
-`/configure` to assign the device to another property; the guest view does not
-expose configuration controls.
+is stored in that device's local storage. Staff can revisit `/configure`, enter
+the environment-provided staff PIN, and assign the device to another property.
+Rails validates the PIN and issues a signed, short-lived setup token. Saving or
+cancelling immediately locks setup again.
 
 ## Requirements
 
 For the quickest setup, install Docker with Compose. Docker Desktop includes both.
+
+Create a `.env` file in the repository root and choose a private staff PIN:
+
+```env
+STAFF_CONFIG_PIN=choose-a-private-pin
+```
 
 For the manual setup, install:
 
@@ -98,7 +105,9 @@ cd frontend && npm run dev
 
 Open <http://localhost:5173>. Vite proxies `/api` to Rails during development.
 Set `VITE_API_PROXY_TARGET` to change the proxy destination and
-`FRONTEND_ORIGIN` to change the origin accepted by Rails.
+`FRONTEND_ORIGIN` to change the origin accepted by Rails. Set
+`STAFF_CONFIG_PIN` in the Rails environment before staff use `/configure`; the
+application intentionally has no default PIN.
 
 ## API
 
@@ -107,6 +116,8 @@ Set `VITE_API_PROXY_TARGET` to change the proxy destination and
 | `GET` | `/api/v1/properties` | List properties |
 | `GET` | `/api/v1/properties/:slug` | Return a property and its ordered City Gems |
 | `GET` | `/api/v1/city_gems` | List the complete curation catalog |
+| `POST` | `/api/v1/staff/session` | Validate the staff PIN and issue a short-lived signed token |
+| `GET` | `/api/v1/staff/session` | Validate a staff setup token |
 
 ## Checks
 
@@ -125,7 +136,7 @@ npm audit
 
 ## Next steps after the MVP
 
-1. Protect `/configure` with staff authentication and store device assignments centrally.
+1. Store device assignments centrally with a stable device identifier.
 2. Add staff-authenticated CRUD for City Gems and properties.
 3. Add image uploads and editorial ordering.
 4. Add browser-level tests for the guest journey and future operations tools.

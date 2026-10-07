@@ -544,6 +544,94 @@ button {
 }
 
 /* ==========================================================================
+   Staff experience: PIN gate
+   ========================================================================== */
+
+.staff-login {
+  width: min(560px, calc(100% - 48px));
+  padding-top: 72px;
+  padding-bottom: 100px;
+}
+.staff-login__card {
+  padding: 46px;
+  border: 1px solid rgba(31, 89, 66, 0.12);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 24px 60px rgba(28, 75, 57, 0.14);
+  backdrop-filter: blur(16px);
+}
+.staff-login__icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 20px;
+  background: #e5f2e8;
+  color: #236147;
+}
+.staff-login h1 {
+  margin: 0;
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: clamp(2.6rem, 5vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1;
+}
+.staff-login__intro {
+  margin: 18px 0 0;
+  color: #5b6e65;
+  line-height: 1.65;
+}
+.staff-login__form {
+  margin-top: 32px;
+  display: grid;
+  gap: 12px;
+}
+.staff-login__form label {
+  color: #315f4c;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+.staff-login__form input {
+  width: 100%;
+  min-height: 54px;
+  padding: 0 17px;
+  border: 1px solid #c9dccf;
+  border-radius: 14px;
+  outline: none;
+  background: #f8fcf8;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+}
+.staff-login__form input:focus {
+  border-color: #397b5d;
+  box-shadow: 0 0 0 4px rgba(57, 123, 93, 0.12);
+}
+.staff-login__form .notice {
+  margin: 0;
+  padding: 13px 15px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+}
+.staff-login__form .primary-button {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 6px;
+}
+.staff-login__back {
+  justify-self: center;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: #526a60;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ==========================================================================
    Staff experience: iPad property configuration
    ========================================================================== */
 
@@ -896,6 +984,14 @@ footer p {
   .manager {
     width: min(100% - 28px, 1040px);
     padding-top: 24px;
+  }
+  .staff-login {
+    width: min(100% - 28px, 560px);
+    padding-top: 34px;
+  }
+  .staff-login__card {
+    padding: 30px 24px;
+    border-radius: 22px;
   }
   .manager__heading {
     align-items: flex-start;

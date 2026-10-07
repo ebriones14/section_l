@@ -27,6 +27,7 @@ services:
       POSTGRES_PASSWORD: postgres
       FRONTEND_ORIGIN: http://localhost:5173
       RAILS_DEVELOPMENT_HOST: backend
+      STAFF_CONFIG_PIN: ${STAFF_CONFIG_PIN}
     command:
       - bash
       - -lc

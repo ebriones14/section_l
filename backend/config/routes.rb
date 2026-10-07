@@ -3,6 +3,10 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :city_gems, only: :index
       resources :properties, only: [ :index, :show ], param: :slug
+
+      namespace :staff do
+        resource :session, only: [ :create, :show ]
+      end
     end
   end
 

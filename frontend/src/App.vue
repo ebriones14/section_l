@@ -1,15 +1,36 @@
 <script setup lang="ts">
-import { Coffee, Gem, Landmark, ShoppingBag, Sparkles, Trees, Utensils } from '@lucide/vue'
+import {
+  Coffee,
+  Gem,
+  Landmark,
+  LockKeyhole,
+  ShoppingBag,
+  Sparkles,
+  Trees,
+  Utensils,
+} from '@lucide/vue'
 import { computed, onMounted, ref } from 'vue'
 import CityGemCard from './components/CityGemCard.vue'
-import { getProperties, getProperty, type CityGem, type Property } from './services/api'
+import {
+  createStaffSession,
+  getProperties,
+  getProperty,
+  hasValidStaffSession,
+  type CityGem,
+  type Property,
+} from './services/api'
 import {
   clearConfiguredPropertySlug,
   getConfiguredPropertySlug,
   saveConfiguredPropertySlug,
 } from './services/propertyConfiguration'
+import {
+  clearStaffSessionToken,
+  getStaffSessionToken,
+  saveStaffSessionToken,
+} from './services/staffSession'
 
-type Screen = 'loading' | 'guest' | 'configuration'
+type Screen = 'loading' | 'guest' | 'staff-login' | 'configuration'
 
 const properties = ref<Property[]>([])
 const currentProperty = ref<Property | null>(null)
@@ -19,6 +40,8 @@ const screen = ref<Screen>('loading')
 const savingConfiguration = ref(false)
 const error = ref('')
 const selectedGem = ref<CityGem | null>(null)
+const staffPin = ref('')
+const unlockingConfiguration = ref(false)
 
 const categoryIcons = {
   All: Gem,
@@ -59,9 +82,42 @@ function closeGemDetails() {
   selectedGem.value = null
 }
 
+function lockConfiguration() {
+  clearStaffSessionToken()
+  staffPin.value = ''
+}
+
+function cancelStaffLogin() {
+  if (!currentProperty.value) return
+
+  lockConfiguration()
+  error.value = ''
+  window.history.replaceState({}, '', '/')
+  screen.value = 'guest'
+}
+
+async function unlockConfiguration() {
+  if (!staffPin.value) return
+
+  unlockingConfiguration.value = true
+  error.value = ''
+
+  try {
+    const session = await createStaffSession(staffPin.value)
+    saveStaffSessionToken(session.token)
+    staffPin.value = ''
+    screen.value = 'configuration'
+  } catch (caught) {
+    error.value = caught instanceof Error ? caught.message : 'Could not unlock device setup.'
+  } finally {
+    unlockingConfiguration.value = false
+  }
+}
+
 function cancelConfiguration() {
   if (!currentProperty.value) return
 
+  lockConfiguration()
   window.history.replaceState({}, '', '/')
   screen.value = 'guest'
 }
@@ -74,6 +130,7 @@ async function applyConfiguration() {
   try {
     await loadProperty(pendingPropertySlug.value)
     saveConfiguredPropertySlug(pendingPropertySlug.value)
+    lockConfiguration()
     window.history.replaceState({}, '', '/')
     screen.value = 'guest'
   } catch (caught) {
@@ -93,7 +150,14 @@ onMounted(async () => {
     if (configurationRequested) {
       if (configuredProperty) await loadProperty(configuredProperty.slug)
       pendingPropertySlug.value = configuredProperty?.slug ?? properties.value[0]?.slug ?? ''
-      screen.value = 'configuration'
+
+      const staffToken = getStaffSessionToken()
+      if (staffToken && (await hasValidStaffSession(staffToken))) {
+        screen.value = 'configuration'
+      } else {
+        lockConfiguration()
+        screen.value = 'staff-login'
+      }
       return
     }
 
@@ -106,17 +170,23 @@ onMounted(async () => {
     if (configuredSlug) clearConfiguredPropertySlug()
     pendingPropertySlug.value = properties.value[0]?.slug ?? ''
     window.history.replaceState({}, '', '/configure')
-    screen.value = 'configuration'
+    lockConfiguration()
+    screen.value = 'staff-login'
   } catch (caught) {
     error.value =
       caught instanceof Error ? caught.message : 'Could not connect to the City Notes API.'
-    screen.value = 'configuration'
+    screen.value = window.location.pathname === '/configure' ? 'staff-login' : 'loading'
   }
 })
 </script>
 
 <template>
-  <div class="app-shell" :class="{ 'app-shell--configuration': screen === 'configuration' }">
+  <div
+    class="app-shell"
+    :class="{
+      'app-shell--configuration': screen === 'configuration' || screen === 'staff-login',
+    }"
+  >
     <header class="site-header" :class="{ 'site-header--guest': screen === 'guest' }">
       <div class="brand">
         <span class="brand__main">SECTION L</span>
@@ -125,7 +195,50 @@ onMounted(async () => {
       <a v-if="screen === 'guest'" class="configure-link" href="/configure">Staff setup</a>
     </header>
 
-    <main v-if="screen === 'configuration'" class="manager section-wrap">
+    <main v-if="screen === 'staff-login'" class="staff-login section-wrap">
+      <section class="staff-login__card">
+        <div class="staff-login__icon" aria-hidden="true">
+          <LockKeyhole :size="30" :stroke-width="1.8" />
+        </div>
+        <p class="eyebrow">Staff access</p>
+        <h1>Unlock device setup</h1>
+        <p class="staff-login__intro">
+          Enter the staff PIN to choose which Section L property this iPad belongs to.
+        </p>
+
+        <form class="staff-login__form" @submit.prevent="unlockConfiguration">
+          <label for="staff-pin">Staff PIN</label>
+          <input
+            id="staff-pin"
+            v-model.trim="staffPin"
+            type="password"
+            inputmode="numeric"
+            autocomplete="off"
+            autofocus
+            placeholder="Enter PIN"
+            @input="error = ''"
+          />
+          <p v-if="error" class="notice notice--error" role="alert">{{ error }}</p>
+          <button
+            type="submit"
+            class="primary-button"
+            :disabled="unlockingConfiguration || !staffPin"
+          >
+            {{ unlockingConfiguration ? 'Checking…' : 'Unlock setup' }}
+          </button>
+          <button
+            v-if="currentProperty"
+            type="button"
+            class="staff-login__back"
+            @click="cancelStaffLogin"
+          >
+            Back to City Notes
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <main v-else-if="screen === 'configuration'" class="manager section-wrap">
       <div class="manager__heading">
         <div class="manager__heading-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" role="img">
@@ -279,7 +392,7 @@ onMounted(async () => {
       </section>
     </main>
 
-    <footer v-if="screen !== 'configuration'">
+    <footer v-if="screen === 'guest'">
       <span>SECTION L</span>
       <p>Made for curious guests in Tokyo.</p>
     </footer>

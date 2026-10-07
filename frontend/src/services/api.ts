@@ -21,6 +21,11 @@ export interface Property {
   city_gems?: CityGem[]
 }
 
+export interface StaffSession {
+  token: string
+  expires_in: number
+}
+
 const API_URL = import.meta.env.VITE_API_URL ?? ''
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
@@ -52,4 +57,29 @@ export async function getProperty(slug: string): Promise<Property> {
 export async function getCityGems(): Promise<CityGem[]> {
   const response = await request<{ city_gems: CityGem[] }>('/api/v1/city_gems')
   return response.city_gems
+}
+
+export async function createStaffSession(pin: string): Promise<StaffSession> {
+  return request<StaffSession>('/api/v1/staff/session', {
+    method: 'POST',
+    body: JSON.stringify({ pin }),
+  })
+}
+
+export async function hasValidStaffSession(token: string): Promise<boolean> {
+  const response = await fetch(`${API_URL}/api/v1/staff/session`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  if (response.status === 401) return false
+
+  if (!response.ok) {
+    const payload = (await response.json().catch(() => ({}))) as { error?: string }
+    throw new Error(payload.error ?? `Request failed (${response.status})`)
+  }
+
+  return true
 }
