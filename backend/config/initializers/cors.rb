@@ -11,6 +11,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
     resource "/api/*",
       headers: :any,
-      methods: [ :get, :patch, :options ]
+      methods: [ :get, :post, :patch, :options ]
   end
 end

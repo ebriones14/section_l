@@ -40,4 +40,14 @@ class StaffSessionsApiTest < ActionDispatch::IntegrationTest
 
     assert_response :unauthorized
   end
+
+  test "allows the frontend to submit the staff PIN across origins" do
+    options "/api/v1/staff/session", headers: {
+      "Origin" => "http://localhost:5173",
+      "Access-Control-Request-Method" => "POST"
+    }
+
+    assert_response :success
+    assert_includes response.headers["Access-Control-Allow-Methods"], "POST"
+  end
 end
