@@ -71,6 +71,10 @@ const visibleGems = computed(() => {
     : gems.filter((gem) => gem.category === selectedCategory.value)
 })
 
+const propertyLocationName = computed(
+  () => currentProperty.value?.name.replace(/^Section L\s*/i, '') ?? '',
+)
+
 async function loadProperty(slug: string) {
   currentProperty.value = await getProperty(slug)
   selectedCategory.value = 'All'
@@ -321,8 +325,10 @@ onMounted(async () => {
         }"
       >
         <div class="hero__content">
-          <p class="eyebrow eyebrow--light">Explore around</p>
-          <h1>{{ currentProperty?.name }}</h1>
+          <h1>
+            <span class="hero__property-brand">Section L</span>
+            <span class="hero__property-name">{{ propertyLocationName }}</span>
+          </h1>
           <p class="hero__intro">{{ currentProperty?.description }}</p>
           <div v-if="currentProperty" class="hero__facts">
             <div class="hero-fact">

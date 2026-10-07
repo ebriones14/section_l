@@ -10,7 +10,10 @@ test('staff can reconfigure the iPad and the selection persists', async ({ page 
   })
   await page.goto('/')
 
-  await expect(page.getByRole('heading', { level: 1, name: 'Section L Ginza East' })).toBeVisible()
+  const propertyHeading = page.getByRole('heading', { level: 1, name: 'Section L Ginza East' })
+  await expect(propertyHeading).toBeVisible()
+  await expect(propertyHeading.locator('.hero__property-brand')).toHaveText('Section L')
+  await expect(propertyHeading.locator('.hero__property-name')).toHaveText('Ginza East')
 
   await page.getByRole('link', { name: 'Staff setup' }).click()
   await expect(page).toHaveURL(/\/configure$/)

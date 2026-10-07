@@ -139,7 +139,7 @@ button {
   align-items: end;
   color: white;
   background:
-    var(--hero-image) center / 100% 100% no-repeat,
+    var(--hero-image) center / cover no-repeat,
     linear-gradient(135deg, #183f33, #5b8d72);
 }
 
@@ -155,16 +155,21 @@ button {
   font-weight: 400;
 }
 .hero h1 {
-  max-width: 690px;
-  margin: 13px 0 16px;
+  max-width: min(690px, 64%);
+  margin: 0 0 16px;
+  display: grid;
   font-family: 'DM Sans', system-ui, sans-serif;
   font-size: clamp(3rem, 5.2vw, 4.9rem);
   font-weight: 700;
-  line-height: 1.04;
+  line-height: 1;
   letter-spacing: -0.045em;
 }
+.hero__property-brand,
+.hero__property-name {
+  display: block;
+}
 .hero__intro {
-  max-width: 610px;
+  max-width: min(610px, 50%);
   margin: 0;
   font-size: 1.05rem;
   line-height: 1.6;
@@ -180,10 +185,6 @@ button {
   font-weight: 700;
   color: #5d766c;
 }
-.eyebrow--light {
-  color: #d8e4d8;
-}
-
 .hero__facts {
   max-width: 380px;
   margin-top: 28px;
@@ -913,9 +914,11 @@ footer p {
     padding-bottom: 108px;
   }
   .hero h1 {
+    max-width: 100%;
     font-size: 2.75rem;
   }
   .hero__intro {
+    max-width: 100%;
     font-size: 0.92rem;
   }
   .recommendations {
