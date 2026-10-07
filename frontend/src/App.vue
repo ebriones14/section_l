@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import CityGemCard from './components/CityGemCard.vue'
-import { getProperties, getProperty, type Property } from './services/api'
+import { getProperties, getProperty, type CityGem, type Property } from './services/api'
 import {
   clearConfiguredPropertySlug,
   getConfiguredPropertySlug,
@@ -17,6 +17,17 @@ const selectedCategory = ref('All')
 const screen = ref<Screen>('loading')
 const savingConfiguration = ref(false)
 const error = ref('')
+const selectedGem = ref<CityGem | null>(null)
+
+const categoryIcons: Record<string, string> = {
+  All: '◇',
+  'Food & Drink': '☕',
+  Shopping: '□',
+  Culture: '◎',
+  Nature: '△',
+  Entertainment: '✦',
+  Cafes: '☕',
+}
 
 const categories = computed(() => [
   'All',
@@ -33,6 +44,14 @@ const visibleGems = computed(() => {
 async function loadProperty(slug: string) {
   currentProperty.value = await getProperty(slug)
   selectedCategory.value = 'All'
+}
+
+function openGemDetails(gem: CityGem) {
+  selectedGem.value = gem
+}
+
+function closeGemDetails() {
+  selectedGem.value = null
 }
 
 function cancelConfiguration() {
@@ -93,11 +112,12 @@ onMounted(async () => {
 
 <template>
   <div class="app-shell" :class="{ 'app-shell--configuration': screen === 'configuration' }">
-    <header class="site-header">
+    <header class="site-header" :class="{ 'site-header--guest': screen === 'guest' }">
       <div class="brand">
         <span class="brand__main">SECTION L</span>
         <span class="brand__sub">CITY NOTES</span>
       </div>
+      <a v-if="screen === 'guest'" class="configure-link" href="/configure">Staff setup</a>
     </header>
 
     <main v-if="screen === 'configuration'" class="manager section-wrap">
@@ -180,27 +200,34 @@ onMounted(async () => {
       >
         <div class="hero__overlay"></div>
         <div class="hero__content">
-          <p class="eyebrow eyebrow--light">A local guide from your hosts</p>
-          <h1>Good places,<br /><em>close by.</em></h1>
-          <p class="hero__intro">
-            {{ currentProperty?.description ?? 'Personally picked places for a day well spent.' }}
-          </p>
+          <p class="eyebrow eyebrow--light">Explore around</p>
+          <h1>{{ currentProperty?.name }}</h1>
+          <p class="hero__intro">{{ currentProperty?.description }}</p>
           <div v-if="currentProperty" class="property-context">
-            <span>You’re staying at</span>
-            <strong>{{ currentProperty.name }}</strong>
+            <span class="property-context__pin" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+            </span>
+            <span class="property-context__copy">
+              <strong>{{ currentProperty.city }}</strong>
+              <span v-if="currentProperty.neighbourhoods.length" class="property-context__areas">
+                ·
+                {{
+                  currentProperty.neighbourhoods
+                    .map((neighbourhood) => neighbourhood.name)
+                    .join(' · ')
+                }}
+              </span>
+              <br />
+              <small>{{ currentProperty.address }}</small>
+            </span>
           </div>
         </div>
       </section>
 
       <section class="recommendations section-wrap">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Handpicked by Section L</p>
-            <h2>Explore the neighborhood</h2>
-          </div>
-          <p>Not a directory. Just the places we genuinely send our friends.</p>
-        </div>
-
         <div v-if="categories.length > 1" class="filters" aria-label="Filter recommendations">
           <button
             v-for="category in categories"
@@ -209,8 +236,17 @@ onMounted(async () => {
             :class="{ active: selectedCategory === category }"
             @click="selectedCategory = category"
           >
+            <span aria-hidden="true">{{ categoryIcons[category] ?? '✦' }}</span>
             {{ category }}
           </button>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <h2>City Gems Nearby</h2>
+            <p>Handpicked places near your stay.</p>
+          </div>
+          <span class="result-count">{{ visibleGems.length }} places</span>
         </div>
 
         <p v-if="error" class="notice notice--error">{{ error }}</p>
@@ -222,7 +258,12 @@ onMounted(async () => {
           <div v-for="index in 3" :key="index" class="loading-card"></div>
         </div>
         <div v-else-if="visibleGems.length" class="gem-grid">
-          <CityGemCard v-for="gem in visibleGems" :key="gem.id" :gem="gem" />
+          <CityGemCard
+            v-for="gem in visibleGems"
+            :key="gem.id"
+            :gem="gem"
+            @select="openGemDetails"
+          />
         </div>
         <div v-else class="empty-state">No picks in this category yet. Check back soon.</div>
       </section>
@@ -232,5 +273,44 @@ onMounted(async () => {
       <span>SECTION L</span>
       <p>Made for curious guests in Tokyo.</p>
     </footer>
+
+    <div
+      v-if="selectedGem"
+      class="details-backdrop"
+      role="presentation"
+      @click.self="closeGemDetails"
+    >
+      <article
+        class="details-panel"
+        role="dialog"
+        aria-modal="true"
+        :aria-labelledby="`gem-${selectedGem.id}-title`"
+      >
+        <button
+          type="button"
+          class="details-panel__close"
+          aria-label="Close details"
+          @click="closeGemDetails"
+        >
+          ×
+        </button>
+        <div class="details-panel__image">
+          <img v-if="selectedGem.image_url" :src="selectedGem.image_url" :alt="selectedGem.name" />
+          <div v-else class="gem-card__placeholder" aria-hidden="true">
+            <span>{{ selectedGem.name.slice(0, 1) }}</span>
+            <small>Section L pick</small>
+          </div>
+        </div>
+        <div class="details-panel__content">
+          <p class="eyebrow">
+            {{ selectedGem.neighbourhoods.map((neighbourhood) => neighbourhood.name).join(' · ') }}
+          </p>
+          <h2 :id="`gem-${selectedGem.id}-title`">{{ selectedGem.name }}</h2>
+          <p class="details-panel__lead">{{ selectedGem.short }}</p>
+          <p>{{ selectedGem.long }}</p>
+          <a :href="selectedGem.maps" target="_blank" rel="noreferrer">Open in Google Maps ↗</a>
+        </div>
+      </article>
+    </div>
   </div>
 </template>
