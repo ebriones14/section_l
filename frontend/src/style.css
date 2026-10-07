@@ -289,8 +289,8 @@ button {
   font-size: 0.8rem;
   font-weight: 600;
 }
-.filters button span {
-  font-size: 1.05rem;
+.filters button svg {
+  flex: 0 0 auto;
 }
 .filters button.active {
   background: linear-gradient(115deg, #5a9e78, var(--forest));

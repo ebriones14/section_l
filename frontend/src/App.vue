@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Coffee, Gem, Landmark, ShoppingBag, Sparkles, Trees, Utensils } from '@lucide/vue'
 import { computed, onMounted, ref } from 'vue'
 import CityGemCard from './components/CityGemCard.vue'
 import { getProperties, getProperty, type CityGem, type Property } from './services/api'
@@ -19,14 +20,18 @@ const savingConfiguration = ref(false)
 const error = ref('')
 const selectedGem = ref<CityGem | null>(null)
 
-const categoryIcons: Record<string, string> = {
-  All: '◇',
-  'Food & Drink': '☕',
-  Shopping: '□',
-  Culture: '◎',
-  Nature: '△',
-  Entertainment: '✦',
-  Cafes: '☕',
+const categoryIcons = {
+  All: Gem,
+  'Food & Drink': Utensils,
+  Shopping: ShoppingBag,
+  Culture: Landmark,
+  Nature: Trees,
+  Entertainment: Sparkles,
+  Cafes: Coffee,
+}
+
+function categoryIcon(category: string) {
+  return categoryIcons[category as keyof typeof categoryIcons] ?? Sparkles
 }
 
 const categories = computed(() => [
@@ -236,7 +241,12 @@ onMounted(async () => {
             :class="{ active: selectedCategory === category }"
             @click="selectedCategory = category"
           >
-            <span aria-hidden="true">{{ categoryIcons[category] ?? '✦' }}</span>
+            <component
+              :is="categoryIcon(category)"
+              aria-hidden="true"
+              :size="18"
+              :stroke-width="1.8"
+            />
             {{ category }}
           </button>
         </div>
