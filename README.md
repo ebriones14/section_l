@@ -1,57 +1,46 @@
 # Section L City Notes
 
-A small, tablet-friendly MVP that helps Section L guests discover genuinely local places near their property. Operations can choose which City Gems appear at each location without changing code.
+An iPad-oriented City Gems experience for Section L guests. Each device is assigned to a
+property by staff, then shows the distinct places connected to that property's neighbourhoods.
 
 ## What is included
 
-- Guest experience with persistent iPad property configuration, category filters, image-led recommendation cards, maps, and source websites
-- City Gems selected through reusable neighbourhood tagging
-- Rails 8.1 JSON API with PostgreSQL, validation, foreign keys, CORS, and idempotent sample seeds
-- Vue 3 + TypeScript frontend built with Vite
-- Rails model/integration tests, Vitest API-client tests, RuboCop, Brakeman, and npm audit/build checks
+- Guest homepage with property context, category filters, City Gem details, image fallbacks,
+  and Google Maps links
+- Staff-only device configuration protected by a PIN
+- Persistent property selection in the iPad browser's local storage
+- Rails 8.1 JSON API backed by PostgreSQL
+- Vue 3 and TypeScript frontend built with Vite
+- Idempotent sample seeds containing the supplied properties, neighbourhoods, and City Gems
+- Rails and Vitest coverage for the main API and frontend behavior
 
-## Product decisions
+## Data model
 
-The MVP models three concepts:
-
-- `Property`: a Section L location with a name, address, and description
-- `Neighbourhood`: an area shared by one or more properties
-- `PropertyNeighbourhood`: the join model supporting the many-to-many property/neighbourhood relationship
-- `CityGem`: a curated place that can appear for any property sharing one of its neighbourhoods
-- `CityGemNeighbourhood`: the join model supporting the many-to-many City Gem/neighbourhood relationship
-
-The guest interface is intentionally editorial rather than a generic directory. Administrative CRUD is intentionally outside this prototype.
-Operations configures each iPad once in the frontend; the selected property slug
-is stored in that device's local storage. Staff can revisit `/configure`, enter
-the environment-provided staff PIN, and assign the device to another property.
-Rails validates the PIN and issues a signed, short-lived setup token. Saving or
-cancelling immediately locks setup again.
-
-## Requirements
-
-For the quickest setup, install Docker with Compose. Docker Desktop includes both.
-
-Create a `.env` file in the repository root and choose a private staff PIN:
-
-```env
-STAFF_CONFIG_PIN=choose-a-private-pin
+```text
+Property ──< PropertyNeighbourhood >── Neighbourhood
+                                             │
+                                             └──< CityGemNeighbourhood >── CityGem
 ```
 
-For the manual setup, install:
+A property can belong to multiple neighbourhoods, and a City Gem can be shared by multiple
+neighbourhoods. The API returns each relevant City Gem only once.
 
-- Ruby 3.4.6
-- Node 22.13.1
-- PostgreSQL 14 or newer
-- Bundler and npm
+## Staff access
 
-The versions are captured in `.tool-versions` for `mise` users.
+Open `/configure` directly or select the gear icon in the homepage header.
 
-The default local databases are `section_l_development` and `section_l_test`.
-Set `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, and `POSTGRES_PASSWORD`
-when your PostgreSQL server does not use the local socket defaults. A production
-`DATABASE_URL` overrides these settings through Rails' standard configuration.
+The development staff PIN is:
 
-## Run with Docker
+```text
+1026
+```
+
+Rails validates the PIN and issues a signed, short-lived setup token. Saving or cancelling the
+configuration locks staff setup again.
+
+## Docker development setup
+
+Docker Desktop includes Docker Compose and is the quickest way to run the complete project.
 
 From the repository root:
 
@@ -59,85 +48,124 @@ From the repository root:
 docker compose up --build
 ```
 
-The legacy `docker-compose up --build` command uses the same configuration.
-Compose waits for PostgreSQL, prepares and seeds the database, starts Rails, and
-then starts Vite. Open <http://localhost:5173> when the services are ready.
+The command starts PostgreSQL, prepares and seeds the database, starts the Rails API, and then
+starts the Vite development server.
 
-Stop the stack with `Ctrl+C`, followed by:
+Open:
+
+- Guest experience: <http://localhost:5173>
+- Staff configuration: <http://localhost:5173/configure>
+- Rails API: <http://localhost:3000/api/v1/properties>
+
+Docker uses `1026` as the default development staff PIN. To override it without committing a
+secret, create a repository-root `.env` file:
+
+```env
+STAFF_CONFIG_PIN=your-private-pin
+```
+
+Stop the services:
 
 ```bash
 docker compose down
 ```
 
-The PostgreSQL data is preserved in a named volume. To reset all Docker data and
-reseed from scratch:
+The PostgreSQL data remains in a named Docker volume. To delete it and rebuild the sample data:
 
 ```bash
 docker compose down --volumes
 docker compose up --build
 ```
 
-## Manual setup
+Useful Docker commands:
+
+```bash
+docker compose logs -f
+docker compose exec backend bin/rails db:seed
+docker compose exec backend bin/rails console
+```
+
+## Manual development setup
+
+Install:
+
+- Ruby 3.4.6
+- Node.js 22.13.1
+- PostgreSQL 14 or newer
+- Bundler and npm
+
+The Ruby and Node versions are also recorded in `.tool-versions` for `mise` users.
+
+With PostgreSQL running, install dependencies and prepare the database from the repository root:
 
 ```bash
 npm run setup
 ```
 
-Or run each step explicitly:
+Alternatively, run the steps separately:
 
 ```bash
 cd backend
 bundle install
-bin/rails db:prepare db:seed
+bin/rails db:prepare
+bin/rails db:seed
 
 cd ../frontend
 npm install
 ```
 
-## Run locally
-
-In two terminals:
+Set the staff PIN in every shell that starts Rails:
 
 ```bash
-cd backend && bin/rails server -p 3000
-cd frontend && npm run dev
+export STAFF_CONFIG_PIN=1026
 ```
 
-Open <http://localhost:5173>. Vite proxies `/api` to Rails during development.
-Set `VITE_API_PROXY_TARGET` to change the proxy destination and
-`FRONTEND_ORIGIN` to change the origin accepted by Rails. Set
-`STAFF_CONFIG_PIN` in the Rails environment before staff use `/configure`; the
-application intentionally has no default PIN.
+Then start the backend and frontend in separate terminals:
 
-## API
+```bash
+cd backend
+bin/rails server -p 3000
+```
+
+```bash
+cd frontend
+npm run dev
+```
+
+Open <http://localhost:5173>. During development, Vite proxies `/api` requests to Rails.
+
+The default local databases are `section_l_development` and `section_l_test`. If PostgreSQL does
+not use local socket defaults, configure `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, and
+`POSTGRES_PASSWORD`. `VITE_API_PROXY_TARGET` changes the frontend proxy destination, while
+`FRONTEND_ORIGIN` changes the origin accepted by Rails.
+
+## API endpoints
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
-| `GET` | `/api/v1/properties` | List properties |
-| `GET` | `/api/v1/properties/:slug` | Return a property and its ordered City Gems |
-| `GET` | `/api/v1/city_gems` | List the complete curation catalog |
-| `POST` | `/api/v1/staff/session` | Validate the staff PIN and issue a short-lived signed token |
-| `GET` | `/api/v1/staff/session` | Validate a staff setup token |
+| `GET` | `/api/v1/properties` | List available properties |
+| `GET` | `/api/v1/properties/:slug` | Return one property and its distinct City Gems |
+| `GET` | `/api/v1/city_gems` | List the complete City Gem catalog |
+| `POST` | `/api/v1/staff/session` | Validate the staff PIN and issue a setup token |
+| `GET` | `/api/v1/staff/session` | Validate an existing setup token |
 
-## Checks
+## Quality checks
+
+Backend:
 
 ```bash
 cd backend
 bin/rails test
 bin/rubocop
 bin/brakeman --no-pager
-
-cd ../frontend
-npm run format:check
-npm run build
-npm test
-npm audit
 ```
 
-## Next steps after the MVP
+Frontend:
 
-1. Store device assignments centrally with a stable device identifier.
-2. Add staff-authenticated CRUD for City Gems and properties.
-3. Add image uploads and editorial ordering.
-4. Add browser-level tests for the guest journey and future operations tools.
-5. Add deployment configuration, multilingual copy, and basic recommendation analytics.
+```bash
+cd frontend
+npm run format:check
+npm test -- --run
+npm run build
+npm audit
+```
