@@ -198,3 +198,29 @@ browser-test suite.
 The Playwright suite uses an iPad Pro-sized viewport and verifies the staff PIN, property
 selection, guest recommendations, and local-storage persistence. Set `PLAYWRIGHT_BASE_URL` to
 run the same suite against another environment.
+
+## Production deployment
+
+Terraform provisions the Vue frontend on Vercel, the Rails API on Render, and PostgreSQL on
+Render. The configuration intentionally uses free plans for this coding-exam deployment.
+
+Create an ignored `.env.terraform` file in the repository root with your provider credentials:
+
+```bash
+export VERCEL_API_TOKEN="..."
+export RENDER_API_KEY="..."
+export RENDER_OWNER_ID="..."
+```
+
+Push the production-ready code to `main`, then review and apply the infrastructure plan:
+
+```bash
+source .env.terraform
+cd infra
+terraform init
+terraform plan -out=section-l.tfplan
+terraform apply section-l.tfplan
+```
+
+See [`infra/README.md`](infra/README.md) for the deployment layout. Render's free web service
+can take longer to answer its first request after a period of inactivity.
