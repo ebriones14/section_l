@@ -23,7 +23,7 @@ neighbourhood_data = [
     description: "Tokyo's flashy entertainment district, where luxury boutiques and gourmet eateries make for the chicest stroll.",
     hashtag_description: "Shop till you drop and dine at Michelin-star restaurants while popping into tiny art galleries at your pace.",
     city: "Tokyo",
-    map_pin: "35.66956, 139.76811",
+    map_pin: "35.66966, 139.76811",
     tags: "Fancy"
   }
 ]
@@ -73,7 +73,9 @@ city_gem_data = [
     category: "Food & Drink",
     short: "Craft matcha latte by a former fish monger.",
     long: "You can't miss the bright red bench outside this cafe. Both artsy and eccentric, the menu features seasonal lattes and hot spiced cider.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Turret+Coffee+Tokyo"
+    maps: "https://maps.app.goo.gl/nftoMh5JJU4HDHjk8",
+    image_url: "https://cms-media.section-l.co/20210513_Section_L_Ginza_9769_d5fc2129fc.jpg",
+    tags: [ "Cafes" ]
   },
   {
     neighbourhood_names: [ "Ginza", "Hatchobori", "Tsukiji" ],
@@ -81,7 +83,9 @@ city_gem_data = [
     category: "Food & Drink",
     short: "A hidden wine and dine spot.",
     long: "If you're a wine lover, you can't skip this spot. You'll be impressed by the bottles of wine lined up along the wall. Tapas served there includes asparagus gratin and anchovy butter fries that will satisfy any light cravings.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Maru+Ginza+Tokyo"
+    maps: "https://maps.app.goo.gl/p732xJiykxpnDPaJ6",
+    image_url: "https://cms-media.section-l.co/20210514_Section_L_Ginza_0284_7e0d8683bc.jpg",
+    tags: [ "Restaurants", "International Cuisine", "Bars" ]
   },
   {
     neighbourhood_names: [ "Ginza", "Hatchobori", "Tsukiji" ],
@@ -89,23 +93,31 @@ city_gem_data = [
     category: "Food & Drink",
     short: "Modern izakaya with classic dishes.",
     long: "The izakaya to go to if you are looking to sample Japanese dishes of the highest quality. Fresh sashimi, perfectly fried cream croquettes, and sake from Nagano are among visitors' favorites here.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Nihombashi+Sando+Tokyo"
+    maps: "https://maps.app.goo.gl/gGq6y8YYTazMtGqd7",
+    image_url: "https://cms-media.section-l.co/20210514_Section_L_Ginza_0199_5640316bd5.jpg",
+    tags: [ "Japanese Food", "Restaurants" ]
   },
   {
     neighbourhood_names: [ "Ginza" ],
-    name: "Postaco",
+    name: "Postalco",
+    legacy_names: [ "Postaco" ],
     category: "Shopping",
     short: "Founded in New York and now based in Tokyo, this design studio and brand has won fans worldwide.",
-    long: "Founded in New York and now based in Tokyo, this design studio and brand has won fans worldwide. Its products, born from close observation of everyday life, range from stationery and bags to an enticing line of apparel.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Postaco+Tokyo"
+    long: "Founded in New York and now based in Tokyo, this design studio and brand has won fans worldwide. Its products, born from close observation of everyday life, range from stationery and bags to an encicing line of apparel.",
+    maps: "https://maps.app.goo.gl/8oyR8zXPDStanhvH7",
+    image_url: "https://cms-media.section-l.co/AM_0_S8_A9393_a86ea2198f.jpg",
+    tags: [ "Family-Friendly" ]
   },
   {
     neighbourhood_names: [ "Ginza" ],
-    name: "FEELSEN",
+    name: "FEELLSEEN",
+    legacy_names: [ "FEELSEN" ],
     category: "Shopping",
     short: "A place to treat yourself to carefully selected artisan items.",
     long: "Once sleeping quarters for kabuki actors, this shop now houses a fine selection of items curated by a well-traveled couple.",
-    maps: "https://www.google.com/maps/search/?api=1&query=FEELSEN+Ginza+Tokyo"
+    maps: "https://goo.gl/maps/oiaa7X3sMC7CdeAW9",
+    image_url: "https://cms-media.section-l.co/Section_L_2310_cfd718474d.jpg",
+    tags: [ "Souvenirs" ]
   },
   {
     neighbourhood_names: [ "Ginza" ],
@@ -113,15 +125,18 @@ city_gem_data = [
     category: "Culture",
     short: "Look down at Ginza's bustling streets.",
     long: "Contains a secret shrine and gives you free views of Ginza's streets.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Ginza+Six+Rooftop+Tokyo"
+    maps: "https://goo.gl/maps/oLrCstHkyURAgXBM9",
+    tags: []
   },
   {
     neighbourhood_names: [ "Hatchobori" ],
-    name: "Cafe Ajito N",
+    name: "Cafe Ajito .N",
+    legacy_names: [ "Cafe Ajito N" ],
     category: "Food & Drink",
     short: "The sheep standing outside is sure to catch your attention.",
     long: "A sheep stands guard here, where you can try lamb taco rice and a unique dates and almond latte.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Cafe+Ajito+N+Tokyo"
+    maps: "https://maps.app.goo.gl/URRaoJrZVAKe4kGD6",
+    tags: []
   },
   {
     neighbourhood_names: [ "Hatchobori" ],
@@ -129,23 +144,28 @@ city_gem_data = [
     category: "Culture",
     short: "A shrine that has been relocated many times.",
     long: "Nestled in a residential area, it's quiet and peaceful. Don't miss the mini Mount Fuji at the back, made of lava from it, that you can walk up.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Teppozu+Inari+Shrine+Tokyo"
+    maps: "https://maps.app.goo.gl/6bqMjftANxJBWsT9A",
+    tags: []
   },
   {
     neighbourhood_names: [ "Hatchobori" ],
     name: "Senmaiya",
     category: "Food & Drink",
     short: "Classic and tasty onigiri made with love.",
-    long: "It is a tiny shop with a wide selection of onigiri rice balls, with brown rice as an option. Simple, tasty, ready to make your belly happy.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Senmaiya+Tokyo"
+    long: "It is a tiny shop with a wide selection of onigiri (rice balls), with brown rice as an option. Simple, tasty, ready to make your belly happy.",
+    maps: "https://maps.app.goo.gl/EHGjjr4zyvJKxjuv6",
+    tags: []
   },
   {
     neighbourhood_names: [ "Tsukiji" ],
-    name: "Shukuba Ganso",
+    name: "Shutoku Ganso",
+    legacy_names: [ "Shukuba Ganso" ],
     category: "Food & Drink",
     short: "Omakase sushi hidden in an alley.",
     long: "Only 8 seats in here and 3 courses to choose from. The dining experience feels private and you can look forward to the chef's special selection of sushi.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Shukuba+Ganso+Tokyo"
+    maps: "https://goo.gl/maps/cHWQmovv5T8ZcM5n6",
+    image_url: "https://cms-media.section-l.co/Section_L_Tsukiji_City_Gems_6157_b7eeb7f3db.jpg",
+    tags: [ "Sushi", "Japanese Food", "Restaurants" ]
   },
   {
     neighbourhood_names: [ "Tsukiji" ],
@@ -153,7 +173,9 @@ city_gem_data = [
     category: "Shopping",
     short: "Pick up a unique souvenir here!",
     long: "If you want a practical souvenir, look no further! Ichifuji stocks a wide selection of kitchenware that can find a new home with you or serve as a special gift for someone.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Ichifuji+Tsukiji+Tokyo"
+    maps: "https://goo.gl/maps/Xt5d17w7uAZVMUmb6",
+    image_url: "https://cms-media.section-l.co/Section_L_Tsukiji_City_Gems_5842_f44d0f424f.jpg",
+    tags: [ "Souvenirs" ]
   },
   {
     neighbourhood_names: [ "Tsukiji" ],
@@ -161,13 +183,16 @@ city_gem_data = [
     category: "Food & Drink",
     short: "Forest vibes on the outside, cozy on the inside.",
     long: "This cozy cafe overgrown with plants sells coffees and a delectable selection of ever-changing pastries. It also hosts puzzle games in Japanese on the second floor.",
-    maps: "https://www.google.com/maps/search/?api=1&query=Kunisuke+Coffee+Tokyo"
+    maps: "https://goo.gl/maps/UK2sJdRQJ8Gv43kM8",
+    image_url: "https://cms-media.section-l.co/Section_L_Tsukiji_City_Gems_5633_5f71aeba22.jpg",
+    tags: [ "Cafes" ]
   }
 ]
 
 city_gem_data.each do |data|
-  attributes = data.except(:neighbourhood_names)
-  city_gem = CityGem.find_or_initialize_by(name: data.fetch(:name))
+  attributes = data.except(:legacy_names, :neighbourhood_names)
+  names = [ data.fetch(:name), *data.fetch(:legacy_names, []) ]
+  city_gem = CityGem.find_by(name: names) || CityGem.new(name: data.fetch(:name))
   city_gem.update!(attributes)
   city_gem.neighbourhoods = data.fetch(:neighbourhood_names).map { |name| neighbourhoods.fetch(name) }
 end
